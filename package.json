@@ -4,6 +4,8 @@
   "description": "High Order component for Lokka",
   "main": "index.js",
   "scripts": {
+    "precommit": "npm run lint",
+    "prepush": "npm t",
     "build": "rm -rf ./lib/ && babel --copy-files ./src --out-dir lib",
     "build:watch": "rm -rf ./lib/ && babel --copy-files ./src --out-dir lib --watch",
     "lint": "eslint ./src",
