@@ -1,6 +1,6 @@
 {
   "name": "lokka-hoc",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "High Order component for Lokka",
   "main": "index.js",
   "scripts": {
