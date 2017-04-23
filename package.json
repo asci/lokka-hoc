@@ -18,6 +18,10 @@
     "lokka-hoc",
     "graphql"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asci/lokka-hoc.git"
+  },
   "author": "asci@yandex.ru",
   "license": "ISC",
   "optionalDependencies": {
