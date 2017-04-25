@@ -1,6 +1,8 @@
 # lokka-hoc
 High order component for Lokka GraphQL client
 
+[![Code Climate](https://codeclimate.com/github/asci/lokka-hoc/badges/gpa.svg)](https://codeclimate.com/github/asci/lokka-hoc)
+
 ## Warning
 This package in development. Not all features from Lokka\GraphQL are supported.
 
