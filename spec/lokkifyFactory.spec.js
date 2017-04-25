@@ -2,12 +2,13 @@ describe('lokkifyFactory', function() {
   const lokkifyFactory = require('../src/lokkifyFactory.js');
 
   it('lokkifyFactory returns a function', function() {
-    const lokkify = lokkifyFactory({}, {}, {});
+    const lokkify = lokkifyFactory({}, {h: {}});
     expect(lokkify).toEqual(jasmine.any(Function));
   });
 
   describe('lokkify', () => {
     let fake;
+    let freact;
     beforeEach(() => {
       fake = {
         client: {
@@ -22,10 +23,11 @@ describe('lokkifyFactory', function() {
         },
         ChildComponent() {}
       };
+      freact = {h: (...args) => fake.renderer(...args), Component: fake.Component};
     });
 
     it('returns a component', function() {
-      const lokkify = lokkifyFactory(fake.client, fake.renderer, fake.Component);
+      const lokkify = lokkifyFactory(fake.client, freact);
       expect(lokkify(fake.ChildComponent, '')).toEqual(jasmine.any(Function));
     });
 
@@ -37,7 +39,7 @@ describe('lokkifyFactory', function() {
           return Promise.resolve('data');
         });
 
-        const lokkify = lokkifyFactory(fake.client, fake.renderer, fake.Component);
+        const lokkify = lokkifyFactory(fake.client, freact);
         const LokkaHoc = lokkify(fake.ChildComponent, 'query');
         const instance = new LokkaHoc();
 
@@ -59,7 +61,7 @@ describe('lokkifyFactory', function() {
           done();
         });
 
-        const lokkify = lokkifyFactory(fake.client, fake.renderer, fake.Component);
+        const lokkify = lokkifyFactory(fake.client, freact);
         const LokkaHoc = lokkify(fake.ChildComponent, '');
         const instance = new LokkaHoc();
 

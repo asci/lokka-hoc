@@ -1,11 +1,16 @@
-module.exports = function lokkifyFactory(lokkaClient, jsxRenderer, Component) {
+module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
 
-  if (!jsxRenderer) {
-    jsxRenderer = require('react').createElement;
+  if (!viewFramework && typeof window !== undefined) {
+    viewFramework = window.React || window.preact;
+
+    if (!viewFramework) {
+      throw new Error('No suitable view layer found in window (expect to have: React or preact)');
+    }
   }
 
-  if (!Component) {
-    Component = require('react').Component;
+  const jsxRenderer = viewFramework.createElement || viewFramework.h;
+  if (!jsxRenderer) {
+    throw new Error('No suitable jsx function provided (expect to have: React or preact)');
   }
 
   function fetcher(query, vars = {}) {
@@ -13,7 +18,7 @@ module.exports = function lokkifyFactory(lokkaClient, jsxRenderer, Component) {
   }
 
   function lokkify(ChildComponent, query, mutations = {}) {
-    return class LokkaHighOrderComponent extends Component {
+    return class LokkaHighOrderComponent extends viewFramework.Component {
       constructor(...args) {
         super(...args);
         this.state = {
@@ -43,7 +48,7 @@ module.exports = function lokkifyFactory(lokkaClient, jsxRenderer, Component) {
               loading: false,
               refetch,
               data: null,
-              errors
+              errors: [errors]
             });
           });
         };

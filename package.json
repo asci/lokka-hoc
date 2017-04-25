@@ -24,9 +24,6 @@
   },
   "author": "asci@yandex.ru",
   "license": "ISC",
-  "optionalDependencies": {
-    "react": "^15.5.4"
-  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^6.1.2",

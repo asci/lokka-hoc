@@ -38,24 +38,24 @@ const client = new Lokka({
 // React by default
 const lokkify = lokkifyFactory(client);
 
-// or React explicitly
-const lokkify = lokkifyFactory(client, React.createElement, React.Component);
+// or React explicitly (if you don't have it in global)
+const lokkify = lokkifyFactory(client, React);
 
-// or preact explicitly
-const lokkify = lokkifyFactory(client, preact.h, preact.Component);
+// or preact explicitly (if you don't have it in global)
+const lokkify = lokkifyFactory(client, preact);
 
 /*
  * Define your component
  */
-function App() {
+function App(props) {
   return (
     <div>
         {
-          this.props.loading
+          props.loading
             ? 'Loading'
             : [
-              this.props.errors && <h3>Error: {this.props.errors.message}</h3>,
-              this.props.data && <h3>Data: {this.props.data}</h3>
+              props.errors && props.errors.map(err => <h3>{err.message}</h3>),
+              props.data && <h3>Data: {props.data}</h3>
             ]
         }
     </div>
@@ -77,9 +77,9 @@ export default lokkify(App, /* GraphQL */`{
 
 ## API
 ### lokkifyFactory
-`lokkifyFactory` with this function you create connect function which will be able to do querying and rendering
+With this function you create connect function which will be able to do querying and rendering
 
-`lokkifyFactory(<Lokka client>, <JSX transform function>, <base Component class>)` it will return `lokkify` function
+`lokkifyFactory(<Lokka client>, [React || preact])` it will return `lokkify` function
 
 ### lokkify
 `lokkify` is used to connect your component and graphql.
@@ -105,4 +105,4 @@ export default lokkify(App, /* GraphQL */`{
 
 
 ## Motivation
-I like the idea of simplicity and modularity of `lokka`. But it required a lot of boilerplate code. I was also inspired by simplicity of `react-apollo`. Unfortunately it doesn't work with `preact` or any other react-like libraries.
+I like the idea of simplicity and modularity of `lokka`. But it required a lot of boilerplate code. I was also inspired by simplicity of `react-apollo`. Unfortunately it doesn't simple to make it work with `preact` or any other react-like libraries.
