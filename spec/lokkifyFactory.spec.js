@@ -34,13 +34,38 @@ describe('lokkifyFactory', function() {
     describe('LokkaHighOrderComponent', () => {
       it('enrich props with lokka related properies', function (done) {
         spyOn(fake.client, 'query').and.callFake(function(query, vars) {
-          expect(query).toEqual('query');
+          expect(query).toEqual('query-as-string');
           expect(vars).toEqual(jasmine.any(Object));
           return Promise.resolve('data');
         });
 
         const lokkify = lokkifyFactory(fake.client, freact);
-        const LokkaHoc = lokkify(fake.ChildComponent, 'query');
+        const LokkaHoc = lokkify(fake.ChildComponent, 'query-as-string');
+        const instance = new LokkaHoc();
+
+        instance.props = {fake: 'props'};
+        instance.componentDidMount();
+        expect(instance.state.loading).toEqual(true);
+        setTimeout(() => {
+          expect(instance.state.loading).toEqual(false);
+          expect(instance.state.data).toEqual('data');
+          expect(instance.state.mutate).toEqual(jasmine.any(Function));
+          done();
+        }, 10);
+      });
+
+      it('enrich props with lokka related properies when query is a function', function (done) {
+        spyOn(fake.client, 'query').and.callFake(function(query, vars) {
+          expect(query).toEqual('query-as-function');
+          expect(vars).toEqual(jasmine.any(Object));
+          return Promise.resolve('data');
+        });
+
+        const lokkify = lokkifyFactory(fake.client, freact);
+        const LokkaHoc = lokkify(fake.ChildComponent, (props) => {
+          expect(props.fake).toEqual('props');
+          return 'query-as-function';
+        });
         const instance = new LokkaHoc();
 
         instance.props = {fake: 'props'};

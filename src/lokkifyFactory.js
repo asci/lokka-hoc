@@ -18,6 +18,11 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
   }
 
   function lokkify(ChildComponent, query, mutations = {}) {
+    let queryFunc = query;
+    if (typeof query === 'string') {
+      queryFunc = () => query;
+    }
+
     return class LokkaHighOrderComponent extends viewFramework.Component {
       constructor(...args) {
         super(...args);
@@ -36,7 +41,7 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
       componentDidMount() {
         this.mounted = true;
         const refetch = (vars) => {
-          this.mounted && fetcher(query, vars).then((data) => {
+          this.mounted && fetcher(queryFunc(this.props), vars).then((data) => {
             this.mounted && this.setState({
               loading: false,
               refetch,
