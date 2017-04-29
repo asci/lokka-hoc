@@ -6,7 +6,7 @@
   "scripts": {
     "precommit": "npm run lint",
     "prepush": "npm t",
-    "prepublishOnly": "npm build",
+    "prepublishOnly": "npm run build",
     "build": "rm -rf ./lib/ && babel --copy-files ./src --out-dir lib",
     "build:watch": "rm -rf ./lib/ && babel --copy-files ./src --out-dir lib --watch",
     "lint": "eslint ./src",
