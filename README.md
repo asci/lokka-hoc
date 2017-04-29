@@ -87,7 +87,12 @@ With this function you create connect function which will be able to do querying
 `lokkify` is used to connect your component and graphql.
 `lokkify(App, query, mutations)` where
 - `App` component you want to connect
-- `query` string representing your main graphql query
+- `query` string representing your main graphql query or a function which receives props from parent component and returns a string:
+```javascript
+lokkify(App, (props) => `{
+    test(limit: "${props.limit}")
+}`, mutations)
+```
 - `mutations` object where key is a name for mutation and value is graphql mutation string.
 
 ### this.props.loading
