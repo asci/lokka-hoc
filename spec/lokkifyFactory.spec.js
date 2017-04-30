@@ -79,6 +79,34 @@ describe('lokkifyFactory', function() {
         }, 10);
       });
 
+      it('will ignore previous query callback if new props received', function (done) {
+        spyOn(fake.client, 'query').and.callFake(function(query) {
+          return new Promise((resolve) => {
+            setTimeout(function () {
+              resolve('data-' + query);
+            }, query == 1 ? 60 : 30);
+          });
+        });
+
+        const lokkify = lokkifyFactory(fake.client, freact);
+        const LokkaHoc = lokkify(fake.ChildComponent, (props) => `${props.number}`);
+        const instance = new LokkaHoc();
+
+        instance.props = {number: 1};
+        instance.componentDidMount();
+        expect(instance.state.loading).toEqual(true);
+        setTimeout(() => {
+          instance.componentWillRecieveProps({number: 2});
+          instance.props = {number: 2};
+          setTimeout(() => {
+            expect(instance.state.loading).toEqual(false);
+            expect(instance.state.data).toEqual('data-2');
+            expect(instance.state.mutate).toEqual(jasmine.any(Function));
+            done();
+          }, 100);
+        }, 10);
+      });
+
       it('renders a child component', function (done) {
         spyOn(fake, 'renderer').and.callFake(function(Component, props, children) {
           expect(Component).toEqual(fake.ChildComponent);

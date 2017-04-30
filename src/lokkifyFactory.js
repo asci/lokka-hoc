@@ -34,22 +34,30 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
         };
       }
 
+      componentWillRecieveProps(nextProps) {
+        if (queryFunc(this.props) !== queryFunc(nextProps)) {
+          setTimeout(() => this._refetch());
+        }
+      }
+
       componentWillUnmount() {
         this.mounted = false;
       }
 
       componentDidMount() {
         this.mounted = true;
+        this.queryId = 0;
         const refetch = (vars) => {
+          const queryId = ++this.queryId;
           this.mounted && fetcher(queryFunc(this.props), vars).then((data) => {
-            this.mounted && this.setState({
+            this.mounted && queryId === this.queryId && this.setState({
               loading: false,
               refetch,
               errors: null,
               data
             });
           }, (errors) => {
-            this.mounted && this.setState({
+            this.mounted && queryId === this.queryId && this.setState({
               loading: false,
               refetch,
               data: null,
@@ -57,7 +65,7 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
             });
           });
         };
-
+        this._refetch = refetch;
         this.setState({
           loading: true
         });
