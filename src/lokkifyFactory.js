@@ -64,11 +64,11 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
               errors: [errors]
             });
           });
+          this.setState({
+            loading: true
+          });
         };
         this._refetch = refetch;
-        this.setState({
-          loading: true
-        });
 
         refetch();
       }
