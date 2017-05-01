@@ -96,7 +96,7 @@ describe('lokkifyFactory', function() {
         instance.componentDidMount();
         expect(instance.state.loading).toEqual(true);
         setTimeout(() => {
-          instance.componentWillRecieveProps({number: 2});
+          instance.componentWillReceiveProps({number: 2});
           instance.props = {number: 2};
           setTimeout(() => {
             expect(instance.state.loading).toEqual(false);

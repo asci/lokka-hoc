@@ -34,7 +34,7 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
         };
       }
 
-      componentWillRecieveProps(nextProps) {
+      componentWillReceiveProps(nextProps) {
         if (queryFunc(this.props) !== queryFunc(nextProps)) {
           setTimeout(() => this._refetch());
         }
