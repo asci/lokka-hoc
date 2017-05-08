@@ -107,6 +107,22 @@ describe('lokkifyFactory', function() {
         }, 10);
       });
 
+      it('will use props as vars if no vars provided', function (done) {
+        spyOn(fake.client, 'query').and.callFake(function(query, vars) {
+          expect(vars.number).toEqual(1);
+          return {then() {
+            done();
+          }};
+        });
+
+        const lokkify = lokkifyFactory(fake.client, freact);
+        const LokkaHoc = lokkify(fake.ChildComponent, (props) => `${props.number}`);
+        const instance = new LokkaHoc();
+
+        instance.props = {number: 1};
+        instance.componentDidMount();
+      });
+
       it('renders a child component', function (done) {
         spyOn(fake, 'renderer').and.callFake(function(Component, props, children) {
           expect(Component).toEqual(fake.ChildComponent);

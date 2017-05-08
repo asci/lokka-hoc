@@ -13,7 +13,7 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
     throw new Error('No suitable jsx function provided (expect to have: React or preact)');
   }
 
-  function fetcher(query, vars = {}) {
+  function fetcher(query, vars) {
     return lokkaClient.query(query, vars);
   }
 
@@ -49,7 +49,7 @@ module.exports = function lokkifyFactory(lokkaClient, viewFramework) {
         this.queryId = 0;
         const refetch = (vars) => {
           const queryId = ++this.queryId;
-          this.mounted && fetcher(queryFunc(this.props), vars).then((data) => {
+          this.mounted && fetcher(queryFunc(this.props), vars || this.props).then((data) => {
             this.mounted && queryId === this.queryId && this.setState({
               loading: false,
               refetch,
